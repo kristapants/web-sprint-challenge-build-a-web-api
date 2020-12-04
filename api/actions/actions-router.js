@@ -2,6 +2,7 @@
 
 const express = require('express');
 const Actions = require('./actions-model');
+const Projects = require('../projects/projects-model')
 
 const router = express.Router();
 
@@ -89,19 +90,28 @@ Actions.get(req.params.id)
 
 function validateActionContents(req, res, next) {
     if (!req.body.description || !req.body.notes) {
-        res.status(400).json({ 
-            errorMessage: "Please provide description and notes for the post." 
+        res.status(400).json({
+            errorMessage: "Please provide description and notes for the post."
         })
     } else if (!req.body.project_id) {
-        res.status(400).json({ 
-            errorMessage: "An action must be associated with a project." 
+        res.status(400).json({
+            errorMessage: "An action must be associated with a project."
         })
     } else if (req.body.description.length > 128) {
-        res.status(400).json({ 
-            errorMessage: "Description must be 128 characters or less." 
+        res.status(400).json({
+            errorMessage: "Description must be 128 characters or less."
         })
+    } else {
+        Projects.get(req.body.project_id)
+            .then(project => {
+                if (!project) {
+                    res.status(404).json({
+                        message: "The project with the specified ID does not exist."
+                    });
+                }
+                next()
+            })
     }
-    next()
 }
 
 module.exports = router;
