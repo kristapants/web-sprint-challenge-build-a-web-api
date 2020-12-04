@@ -12,28 +12,8 @@ I need this code, but don't know where, perhaps should make some middleware, don
 
 Go code!
 */
-const dotenv = require('dotenv')
-dotenv.config()
+const server = require('./api/server.js');
 
-const express = require('express')
-const cors = require('cors')
-const port = process.env.PORT || 4000
-const path = require ('path')
-
-const app = express()
-app.use(cors())
-app.use(express.json())
-app.use(express.static(path.join(__dirname, 'client/build')))
-
-// api, routers, the rest of the app.
-app.use('/api/*', (_, res) => {
-    res.json({data:"A test inside app.use"})
-})
-
-app.use('*', (_, res) => {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'))
-})
-
-app.listen(port, () => {
-    console.log(`Listening on ${port}`)
-})
+server.listen(4000, () => {
+  console.log('\n*** Server Running on http://localhost:4000 ***\n');
+});

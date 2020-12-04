@@ -5,6 +5,7 @@ const Projects = require('./projects-model');
 
 const router = express.Router();
 
+//get all projects
 router.get('/', (req, res) => {
     Projects.get()
       .then(projects => {
@@ -15,6 +16,9 @@ router.get('/', (req, res) => {
           error: "oogabooga"
         });
       });
-  });
+});
+
+//get all proj
+
 
 module.exports = router;
